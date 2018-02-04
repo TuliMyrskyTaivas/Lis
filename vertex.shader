@@ -1,12 +1,12 @@
-#version 130
+#version 430
 
-attribute highp vec4 posAttr;
-attribute lowp vec4 colAttr;
-varying lowp vec4 col;
+layout(location = 0) in vec3 vertexPosition;
+layout(location = 1) in vec2 texCoord;
 uniform highp mat4 matrix;
+out vec2 texc;
 
 void main()
 {
-	col = colAttr;
-	gl_Position = matrix * posAttr;
+    gl_Position = matrix * vec4(vertexPosition, 1.0);
+    texc = texCoord;
 }

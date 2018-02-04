@@ -36,6 +36,7 @@ private:
     void generateSphereVertices();
 
     GLuint m_matrixUniform = 0;
+    GLuint m_textureUniform = 0;
 
     const GLuint m_numLatLines = 40;
     const GLuint m_numLongLines = 40;

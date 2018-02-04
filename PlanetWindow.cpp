@@ -61,6 +61,7 @@ void PlanetWindow::initialize()
             m_program->log().toStdString());
 
     m_matrixUniform = m_program->uniformLocation("matrix");
+    m_textureUniform = m_program->uniformLocation("texture");
 
     // Create VAO for the first object to render
     m_vao->create();
@@ -106,6 +107,8 @@ void PlanetWindow::render()
     if (!m_program->bind())
         throw std::runtime_error("failed to bind the shader program to active GL context");
 
+    m_texture->bind();
+
     // Calculate the rotation matrix
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
@@ -113,9 +116,12 @@ void PlanetWindow::render()
     matrix.rotate(20.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
     m_program->setUniformValue(m_matrixUniform, matrix);
 
+    // Use texture unit 0
+    m_program->setUniformValue(m_textureUniform, 0);
+
     // Draw the mesh
     m_vao->bind();
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indexes.size()), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(m_indexes.size()), GL_UNSIGNED_INT, 0);
     m_vao->release();
 
     m_program->release();
