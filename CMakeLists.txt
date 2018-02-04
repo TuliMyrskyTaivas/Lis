@@ -28,6 +28,8 @@ set (SOURCES
 	PlanetWindow.h
 	PlanetWindow.cpp
 	Lis.cpp
+	Logger.h
+	Logger.cpp	
 )
 
 include_directories(${CMAKE_SOURCE_DIR})

@@ -37,10 +37,11 @@ private:
 
     GLuint m_matrixUniform = 0;
 
-    GLuint m_numLatLines = 40;
-    GLuint m_numLongLines = 40;
-    GLfloat m_radius = 0.7f;
+    const GLuint m_numLatLines = 40;
+    const GLuint m_numLongLines = 40;
+    const GLfloat m_radius = 0.7f;
 
+    /// <summary>   The frame count. </summary>
     int	m_frame = 0;
 
     std::vector<GLuint> m_indexes;

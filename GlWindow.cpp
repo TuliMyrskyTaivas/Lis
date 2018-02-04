@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "GlWindow.h"
+#include "Logger.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QOpenGLContext>
@@ -102,9 +103,10 @@ void GlWindow::renderNow()
         const char* glVendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
         const char* glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
         const char* glgsVersion = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
-        qInfo() << "GL vendor: " << glVendor;
-        qInfo() << "GL version: " << glVersion;
-        qInfo() << "GLGS version: " << glgsVersion;
+        Logger& log = Logger::GetInstance();
+        log.Info() << "GL vendor: " << glVendor;
+        log.Info() << "GL version: " << glVersion;
+        log.Info() << "GLGS version: " << glgsVersion;
     }
 
     render();

@@ -12,6 +12,7 @@
 #include <QtGui/QSurfaceFormat>
 
 #include "PlanetWindow.h"
+#include "Logger.h"
 
 int main(int argc, char *argv[])
 try
@@ -33,6 +34,6 @@ try
 }
 catch (const std::exception& e)
 {
-    std::cerr << "terminated: " << e.what();
+    Lis::Logger::GetInstance().Error() << "terminated: " << e.what();
     return EXIT_FAILURE;
 }
