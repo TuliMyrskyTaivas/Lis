@@ -49,8 +49,8 @@ private:
     std::vector<QVector2D> m_texCoords;
 
     QOpenGLBuffer m_positionBuffer;
-    QOpenGLBuffer m_colorBuffer;
     QOpenGLBuffer m_indexBuffer;
+    QOpenGLBuffer m_colorBuffer;
 
     std::unique_ptr<QOpenGLVertexArrayObject> m_vao;
     std::unique_ptr<QOpenGLShaderProgram> m_program;

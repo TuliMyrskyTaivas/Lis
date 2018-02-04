@@ -20,7 +20,10 @@ namespace Lis
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 PlanetWindow::PlanetWindow()
-    : m_vao(new QOpenGLVertexArrayObject(this))
+    : m_positionBuffer(QOpenGLBuffer::VertexBuffer)
+    , m_indexBuffer(QOpenGLBuffer::IndexBuffer)
+    , m_colorBuffer(QOpenGLBuffer::PixelPackBuffer)
+    , m_vao(new QOpenGLVertexArrayObject(this))
     , m_program(new QOpenGLShaderProgram(this))
     , m_glLogger(new QOpenGLDebugLogger(this))
 {
@@ -61,17 +64,25 @@ void PlanetWindow::initialize()
 
     // Create VAO for the first object to render
     m_vao->create();
+    // Setup VBO and IBO. These will be remembered by the currently bound VAO
     m_vao->bind();
 
-    // Setup VBOs and IBO. These will be remembered by the currently bound VAO
+    // VBO
     m_positionBuffer.create();
-    m_positionBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
+    m_positionBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_positionBuffer.bind();
     const int posBufSize = static_cast<int>(m_vertices.size() * 3 * sizeof(float));
     m_positionBuffer.allocate(m_vertices.data(), posBufSize);
 
     m_program->enableAttributeArray("vertexPosition");
     m_program->setAttributeBuffer("vertexPosition", GL_FLOAT, 0, 3);
+
+    // IBO
+    m_indexBuffer.create();
+    m_indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_indexBuffer.bind();
+    const int idxBufSize = static_cast<int>(m_indexes.size() * sizeof(GLuint));
+    m_indexBuffer.allocate(m_indexes.data(), idxBufSize);
 
     m_colorBuffer.create();
     m_colorBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -81,6 +92,8 @@ void PlanetWindow::initialize()
 
     m_program->enableAttributeArray("texCoord");
     m_program->setAttributeBuffer("texCoord", GL_FLOAT, 0, 4);
+
+    m_vao->release();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,9 +114,9 @@ void PlanetWindow::render()
     m_program->setUniformValue(m_matrixUniform, matrix);
 
     // Draw the mesh
-    m_texture->bind();
-    //glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(m_vertices.size()));
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indexes.size()), GL_UNSIGNED_INT, &m_indexes[0]);
+    m_vao->bind();
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indexes.size()), GL_UNSIGNED_INT, 0);
+    m_vao->release();
 
     m_program->release();
 
